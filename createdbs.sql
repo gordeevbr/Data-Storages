@@ -150,3 +150,25 @@ create table "order_product" (
   "amount" smallint not null
 );
 
+using ds_restore;
+
+create table "result" (
+  "id" bigserial primary key, 
+  "createddate" timestamp not null,
+  "paymentreceiveddate" timestamp,
+  "completeddate" timestamp,
+  "canceleddate" timestamp,
+  "refunddate" timestamp
+)
+
+create table "product" (
+  "id" bigserial primary key,
+  "name" character varying(255) unique,
+  "description" text,
+  "price" numeric not null,
+  "pricestartdate" timestamp not null,
+  "category" varchar(255) not null,
+  "manufacturer" varchar(255) not null,
+  "manufacturerwebsite" varchar(255),
+  "manufactureraddress" varchar(255)
+)
