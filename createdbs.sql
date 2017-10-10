@@ -1,5 +1,7 @@
 ---User Dropping/Creation---
 
+reassign owned by ds_user to postgres;
+
 drop user if exists ds_user;
 create user ds_user with password 'ds_user_password';
 
@@ -15,7 +17,7 @@ create database ds_branch2 with owner ds_user;
 create database ds_central with owner ds_user;
 create database ds_restore with owner ds_user;
 
-using ds_branch1;
+\c ds_branch1;
 
 create table "categories" (
   "id" bigserial primary key,
@@ -60,7 +62,7 @@ create table "order_product" (
   "amount" smallint not null
 );
 
-using ds_branch2;
+\c ds_branch2;
 
 create table "categories" (
   "id" bigserial primary key,
@@ -105,7 +107,7 @@ create table "order_product" (
   "amount" smallint not null
 );
 
-using ds_restore;
+\c ds_restore;
 
 create table "categories" (
   "id" bigserial primary key,
@@ -150,7 +152,7 @@ create table "order_product" (
   "amount" smallint not null
 );
 
-using ds_restore;
+\c ds_restore;
 
 create table "result" (
   "id" bigserial primary key, 
@@ -159,7 +161,7 @@ create table "result" (
   "completeddate" timestamp,
   "canceleddate" timestamp,
   "refunddate" timestamp
-)
+);
 
 create table "product" (
   "id" bigserial primary key,
@@ -171,4 +173,4 @@ create table "product" (
   "manufacturer" varchar(255) not null,
   "manufacturerwebsite" varchar(255),
   "manufactureraddress" varchar(255)
-)
+);
