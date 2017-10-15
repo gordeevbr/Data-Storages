@@ -1,22 +1,3 @@
----User Dropping/Creation---
-
-reassign owned by ds_user to postgres;
-
-drop user if exists ds_user;
-create user ds_user with password 'ds_user_password';
-
----DB Dropping/Creation---
-
-drop database if exists ds_branch1;
-drop database if exists ds_branch2;
-drop database if exists ds_central;
-drop database if exists ds_restore;
-
-create database ds_branch1 with owner ds_user;
-create database ds_branch2 with owner ds_user;
-create database ds_central with owner ds_user;
-create database ds_restore with owner ds_user;
-
 \c ds_branch1;
 
 create table "categories" (
@@ -152,10 +133,16 @@ create table "order_product" (
   "amount" smallint not null
 );
 
-\c ds_restore;
+\c ds_central;
 
-create table "result" (
-  "id" bigserial primary key, 
+create table "branches" (
+  "id" bigserial primary key,
+  "number" bigserial not null
+);
+
+create table "results" (
+  "id" bigserial primary key,
+  "insertdate" timestamp not null,
   "createddate" timestamp not null,
   "paymentreceiveddate" timestamp,
   "completeddate" timestamp,
@@ -163,7 +150,7 @@ create table "result" (
   "refunddate" timestamp
 );
 
-create table "product" (
+create table "products" (
   "id" bigserial primary key,
   "name" character varying(255) unique,
   "description" text,
@@ -173,4 +160,12 @@ create table "product" (
   "manufacturer" varchar(255) not null,
   "manufacturerwebsite" varchar(255),
   "manufactureraddress" varchar(255)
+);
+
+create table "orders" (
+  "id" bigserial primary key,
+  "branchid" bigserial references branches (id),
+  "resultid" bigserial references results (id),
+  "productid" bigserial references products (id),
+  "amount" smallint not null
 );
