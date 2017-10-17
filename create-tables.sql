@@ -169,3 +169,6 @@ create table "orders" (
   "productid" bigserial references products (id),
   "amount" smallint not null
 );
+
+create schema branch1_schema AUTHORIZATION ds_user;
+create schema branch2_schema AUTHORIZATION ds_user;
