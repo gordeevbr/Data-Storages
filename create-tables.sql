@@ -135,24 +135,9 @@ create table "order_product" (
 
 \c ds_central;
 
-create table "branches" (
-  "id" bigserial primary key,
-  "number" bigserial not null
-);
-
-create table "results" (
-  "id" bigserial primary key,
-  "insertdate" timestamp not null,
-  "createddate" timestamp not null,
-  "paymentreceiveddate" timestamp,
-  "completeddate" timestamp,
-  "canceleddate" timestamp,
-  "refunddate" timestamp
-);
-
 create table "products" (
   "id" bigserial primary key,
-  "name" character varying(255) unique,
+  "name" character varying(255),
   "description" text,
   "price" numeric not null,
   "pricestartdate" timestamp not null,
@@ -164,10 +149,21 @@ create table "products" (
 
 create table "orders" (
   "id" bigserial primary key,
-  "branchid" bigserial references branches (id),
-  "resultid" bigserial references results (id),
   "productid" bigserial references products (id),
-  "amount" smallint not null
+  "amount" smallint not null,
+  "branch" smallint not null,
+  "insertdate" timestamp not null,
+  "createddate" timestamp not null,
+  "paymentreceiveddate" timestamp,
+  "completeddate" timestamp,
+  "canceleddate" timestamp,
+  "refunddate" timestamp
+);
+
+create table "products_merge" (
+  "id" bigserial primary key,
+  "oldid" bigserial not null,
+  "branch" smallint not null
 );
 
 create schema branch1_schema AUTHORIZATION ds_user;

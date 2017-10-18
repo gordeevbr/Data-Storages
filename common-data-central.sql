@@ -1,1 +1,0 @@
-insert into branches (number) values (1), (2);
