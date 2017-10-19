@@ -144,26 +144,22 @@ create table "products" (
   "category" varchar(255) not null,
   "manufacturer" varchar(255) not null,
   "manufacturerwebsite" varchar(255),
-  "manufactureraddress" varchar(255)
+  "manufactureraddress" varchar(255),
+  "oldid" bigserial not null,
+  "branch" smallint not null
 );
 
 create table "orders" (
   "id" bigserial primary key,
-  "productid" bigserial references products (id),
+  "productid" bigserial not null,
   "amount" smallint not null,
   "branch" smallint not null,
-  "insertdate" timestamp not null,
   "createddate" timestamp not null,
   "paymentreceiveddate" timestamp,
   "completeddate" timestamp,
   "canceleddate" timestamp,
-  "refunddate" timestamp
-);
-
-create table "products_merge" (
-  "id" bigserial primary key,
-  "oldid" bigserial not null,
-  "branch" smallint not null
+  "refunddate" timestamp,
+  "oldid" bigserial not null
 );
 
 create schema branch1_schema AUTHORIZATION ds_user;
