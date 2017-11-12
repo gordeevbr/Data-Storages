@@ -162,5 +162,9 @@ create table "orders" (
   "oldid" bigserial not null
 );
 
+create table "migration_log" (
+  "migration_date" timestamp primary key
+);
+
 create schema branch1_schema AUTHORIZATION ds_user;
 create schema branch2_schema AUTHORIZATION ds_user;
