@@ -163,8 +163,10 @@ create table "orders" (
 );
 
 create table "migration_log" (
-  "migration_date" timestamp primary key
+  "id" bigserial primary key,
+  "migration_date" timestamp unique
 );
 
 create schema branch1_schema AUTHORIZATION ds_user;
 create schema branch2_schema AUTHORIZATION ds_user;
+create schema restore_schema AUTHORIZATION ds_user;
