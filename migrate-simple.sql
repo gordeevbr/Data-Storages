@@ -21,11 +21,11 @@ BEGIN
       INTO orders (
           productid, amount, branch,
           createddate, paymentreceiveddate, completeddate,
-          canceleddate, refunddate
+          canceleddate, refunddate, oldid
       ) VALUES (
           iter.oppid, iter.opam, 1,
           iter.ocrdate, iter.oprdate, iter.ocodate,
-          iter.ocadate, iter.orfdate
+          iter.ocadate, iter.orfdate, iter.oid
       );
   END LOOP;
 
@@ -34,11 +34,11 @@ BEGIN
     INTO orders (
       productid, amount, branch,
       createddate, paymentreceiveddate, completeddate,
-      canceleddate, refunddate
+      canceleddate, refunddate, oldid
     ) VALUES (
       iter.oppid, iter.opam, 2,
       iter.ocrdate, iter.oprdate, iter.ocodate,
-      iter.ocadate, iter.orfdate
+      iter.ocadate, iter.orfdate, iter.oid
     );
   END LOOP;
 END;

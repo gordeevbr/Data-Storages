@@ -170,3 +170,35 @@ create table "migration_log" (
 create schema branch1_schema AUTHORIZATION ds_user;
 create schema branch2_schema AUTHORIZATION ds_user;
 create schema restore_schema AUTHORIZATION ds_user;
+
+\c ds_mart;
+
+create table "products" (
+  "id" bigserial primary key,
+  "name" character varying(255),
+  "description" text,
+  "price" numeric not null,
+  "pricestartdate" timestamp not null,
+  "category" varchar(255) not null,
+  "manufacturer" varchar(255) not null,
+  "manufacturerwebsite" varchar(255),
+  "manufactureraddress" varchar(255),
+  "oldid" bigserial not null,
+  "branch" smallint not null
+);
+
+create table "orders" (
+  "id" bigserial primary key,
+  "productid" bigserial not null,
+  "amount" smallint not null,
+  "branch" smallint not null,
+  "createddate" timestamp not null,
+  "paymentreceiveddate" timestamp,
+  "completeddate" timestamp,
+  "canceleddate" timestamp,
+  "refunddate" timestamp,
+  "oldid" bigserial not null
+);
+
+create schema branch1_schema AUTHORIZATION ds_user;
+create schema branch2_schema AUTHORIZATION ds_user;
