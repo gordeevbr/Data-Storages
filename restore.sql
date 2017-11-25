@@ -1,3 +1,5 @@
+-- For 'target_branch' selects all data from storage that happened before 'migration_date'
+-- and inserts it into restoration database.
 CREATE OR REPLACE FUNCTION restore_by_date(target_branch INT, migration_date TIMESTAMP) RETURNS VOID AS $PROC$
 DECLARE
   products_cursor CURSOR FOR
@@ -64,6 +66,7 @@ BEGIN
 END;
 $PROC$ LANGUAGE plpgsql;
 
+-- Selects migration date from 'migration_log' based on 'target_migration'.
 CREATE OR REPLACE FUNCTION restore(target_branch INT, target_migration INT) RETURNS VOID AS $PROC$
 DECLARE
   target_migration_date TIMESTAMP;
@@ -73,4 +76,7 @@ BEGIN
 END;
 $PROC$ LANGUAGE plpgsql;
 
+-- Entry point for branch restoration from snapshot script.
+-- Restores 'target_branch' snapshot since 'target_migration'.
+-- Terminal usage example: 'psql -f restore.sql -v target_branch=1 -v target_migration=2'.
 SELECT restore(:target_branch, :target_migration);

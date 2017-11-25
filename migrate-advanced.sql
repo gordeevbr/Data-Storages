@@ -1,3 +1,4 @@
+-- Migrates all new product prices from both branches since 'last_migration' timestamp.
 CREATE OR REPLACE FUNCTION migrate_advanced_products(last_migration TIMESTAMP) RETURNS VOID AS $PROC$
 DECLARE
   schema1_cursor CURSOR FOR
@@ -52,6 +53,8 @@ BEGIN
 END;
 $PROC$ LANGUAGE plpgsql;
 
+-- Migrates all old orders from both branches which were updated since 'last_migration' timestamp.
+-- (order creation date is sooner than 'last_migration' but any other date is later)
 CREATE OR REPLACE FUNCTION migrate_advanced_sells_update(last_migration TIMESTAMP) RETURNS VOID AS $PROC$
 DECLARE
     schema1_cursor CURSOR FOR
@@ -110,6 +113,7 @@ BEGIN
 END;
 $PROC$ LANGUAGE plpgsql;
 
+-- Migrates all new orders from both branches since 'last_migration' timestamp.
 CREATE OR REPLACE FUNCTION migrate_advanced_sells_insert(last_migration TIMESTAMP) RETURNS VOID AS $PROC$
 DECLARE
   schema1_cursor CURSOR FOR
@@ -158,6 +162,10 @@ BEGIN
 END;
 $PROC$ LANGUAGE plpgsql;
 
+-- Selects the last migration date
+-- (or the start of UNIX epoch if this is the first migration),
+-- migrates all new data since that date from both branches
+-- and then updates the migration log.
 CREATE OR REPLACE FUNCTION migrate_advanced() RETURNS VOID AS $PROC$
 DECLARE
   last_migration TIMESTAMP;
@@ -179,4 +187,6 @@ BEGIN
 END;
 $PROC$ LANGUAGE plpgsql;
 
+-- Entry point for migration script.
+-- Selects all new data since previous migration from both branches and inserts it into storage.
 SELECT migrate_advanced();
