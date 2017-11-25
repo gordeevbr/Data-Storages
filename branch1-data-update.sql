@@ -7,4 +7,8 @@ insert into orders (createddate, paymentreceiveddate, completeddate, canceleddat
   (clock_timestamp(), clock_timestamp(), clock_timestamp(), null, null),
   (clock_timestamp(), clock_timestamp(), null, clock_timestamp(), null);
 
+insert into order_product (productid, orderid, amount) VALUES
+  (2, 6, 1),
+  (5, 7, 3);
+
 update orders set refunddate = clock_timestamp() where id = 1;

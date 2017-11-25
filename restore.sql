@@ -34,14 +34,24 @@ BEGIN
   END LOOP;
 
   FOR iter IN order_cursor LOOP
-    INSERT
-    INTO restore_schema.orders (
-      id, createddate, paymentreceiveddate,
-      completeddate, canceleddate, refunddate
-    ) VALUES (
-      iter.oldid, iter.createddate, iter.paymentreceiveddate,
-      iter.completeddate, iter.canceleddate, iter.refunddate
-    ) ON CONFLICT DO NOTHING;
+    IF EXISTS (SELECT 1 FROM restore_schema.orders ord WHERE ord.id = iter.oldid) THEN
+      UPDATE restore_schema.orders ord SET
+        createddate = iter.createddate,
+        paymentreceiveddate = iter.paymentreceiveddate,
+        completeddate = iter.completeddate,
+        canceleddate = iter.canceleddate,
+        refunddate = iter.refunddate
+      WHERE ord.id = iter.oldid;
+    ELSE
+      INSERT
+        INTO restore_schema.orders (
+          id, createddate, paymentreceiveddate,
+          completeddate, canceleddate, refunddate
+        ) VALUES (
+          iter.oldid, iter.createddate, iter.paymentreceiveddate,
+          iter.completeddate, iter.canceleddate, iter.refunddate
+        ) ON CONFLICT DO NOTHING;
+    END IF;
 
     INSERT
     INTO restore_schema.order_product (
